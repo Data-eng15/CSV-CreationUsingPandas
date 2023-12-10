@@ -1,0 +1,27 @@
+import pandas as pd
+import requests
+
+# Replace 'YOUR_API_KEY' with your actual OpenWeatherMap API key
+api_key = '582975a2895972b638d5b5e9c244dea6'
+city = 'London'  # You can change the city as needed
+url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}'
+
+# Fetch data from the API
+response = requests.get(url)
+data = response.json()
+
+# Extract relevant information
+weather_data = {
+    'City': [city],
+    'Temperature (Celsius)': [data['main']['temp'] - 273.15],  # Convert Kelvin to Celsius
+    'Humidity (%)': [data['main']['humidity']],
+    'Description': [data['weather'][0]['description']]
+}
+
+# Create a DataFrame
+df = pd.DataFrame(weather_data)
+
+# Save the DataFrame to a CSV file
+df.to_csv('weather_data.csv', index=False)
+
+print("CSV file created successfully.")
